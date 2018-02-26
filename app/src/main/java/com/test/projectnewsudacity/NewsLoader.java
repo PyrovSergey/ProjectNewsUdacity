@@ -18,7 +18,6 @@ public class NewsLoader extends AsyncTaskLoader<List<News>> {
     @Override
     protected void onStartLoading() {
         forceLoad();
-        Log.e("MyTAGS", "сработал метод onStartLoading()");
     }
 
     @Override
@@ -28,8 +27,6 @@ public class NewsLoader extends AsyncTaskLoader<List<News>> {
         }
 
         List<News> news = QueryUtils.fetchNewsData(url);
-        Log.e("MyTAGS", "сработал метод loadInBackground()");
-        Log.e("MyTAGS", url.toString());
         return news;
     }
 }

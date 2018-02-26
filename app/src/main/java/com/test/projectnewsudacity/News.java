@@ -1,9 +1,5 @@
 package com.test.projectnewsudacity;
 
-/**
- * Created by pyrov on 26.02.2018.
- */
-
 public class News {
 
     private String title;
@@ -16,12 +12,15 @@ public class News {
 
     private String byline;
 
-    public News(String title, String sectionName, String date, String url, String byline) {
+    private String trailText;
+
+    public News(String title, String sectionName, String date, String url, String byline, String trailText) {
         this.title = title;
         this.sectionName = sectionName;
         this.date = date;
         this.url = url;
         this.byline = byline;
+        this.trailText = trailText;
     }
 
     public String getTitle() {
@@ -42,5 +41,9 @@ public class News {
 
     public String getByline() {
         return byline;
+    }
+
+    public String getTrailText() {
+        return trailText;
     }
 }

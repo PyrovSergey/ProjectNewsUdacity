@@ -7,6 +7,7 @@ import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,14 +22,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>>  {
 
-    public static final String LOG_TAG = "MyTAGS";
-
     private NewsAdapter newsAdapter;
 
     private TextView mEmptyStateTextView;
 
     private static final String str1 = "http://content.guardianapis.com/search?order-by=newest&page-size=200&q=";
-    private static final String str2 = "&api-key=test";
+    private static final String str2 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
     private static String result;
 
     private static final int NEWS_LOADER_ID = 1;
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             mEmptyStateTextView.setText("No internet connection");
         }
     }
-
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {

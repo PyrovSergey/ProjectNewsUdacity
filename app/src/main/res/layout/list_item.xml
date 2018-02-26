@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="2"
@@ -38,6 +38,24 @@
         app:layout_constraintTop_toBottomOf="@+id/section_name"
         app:layout_constraintVertical_bias="0.0"
         tools:text="Title" />
+
+    <TextView
+        android:id="@+id/trailText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="5dp"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title"
+        app:layout_constraintVertical_bias="0.704"
+        tools:text="Text" />
 
     <TextView
         android:id="@+id/date"

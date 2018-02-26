@@ -1,7 +1,6 @@
 package com.test.projectnewsudacity;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,8 +17,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.test.projectnewsudacity.MainActivity.LOG_TAG;
-
 public final class QueryUtils {
 
     private QueryUtils() {
@@ -32,11 +29,10 @@ public final class QueryUtils {
         try {
             jsonResponce = makeHttpRequest(url);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+
         }
 
         List<News> news = extractFeatureFromJson(jsonResponce);
-        Log.e("QueryUtils", "сработал метод fetchEarthquakeData()");
 
         return news;
     }
@@ -55,46 +51,69 @@ public final class QueryUtils {
                 String sectionName;
                 String url;
                 String date;
-                String byline = " ";
+                String byline;
+                String trailText;
                 JSONObject currentNews = results.optJSONObject(i);
                 if (currentNews == null) {
                     continue;
                 }
 
-                title = currentNews.getString("webTitle");
-                if (title == null) {
+                title = currentNews.optString("webTitle");
+                if (TextUtils.isEmpty(title)) {
                     title = "Title is missing";
                 }
+                if (title.contains("|")) {
+                    int index = title.indexOf("|");
+                    title = title.substring(0, index - 1);
+                }
 
-                sectionName = currentNews.getString("sectionName");
-                if (sectionName == null) {
-                    sectionName = " ";
+                sectionName = currentNews.optString("sectionName");
+                if (TextUtils.isEmpty(sectionName)) {
+                    sectionName = "section";
                 }
 
                 url = currentNews.optString("webUrl");
-                if (url == null) {
+                if (TextUtils.isEmpty(url)) {
                     url = "https://www.theguardian.com";
                 }
 
-                String resultDate = currentNews.getString("webPublicationDate");
-                if (resultDate == null) {
-                    date = " ";
+                String resultDate = currentNews.optString("webPublicationDate");
+                if (TextUtils.isEmpty(resultDate)) {
+                    date = "date";
                 } else {
                     date = resultDate.substring(11, 16) + "    " + resultDate.substring(0, 10);
                     date = date.replaceAll("-", ".");
                 }
 
-                JSONObject fields = currentNews.getJSONObject("fields");
-                byline = fields.getString("byline");
-                    if (byline == null) {
-                        byline = " ";
-                    }
+                JSONObject fields = currentNews.optJSONObject("fields");
+                if (fields == null) {
+                    continue;
+                }
+                byline = fields.optString("byline");
+                if (TextUtils.isEmpty(byline)) {
+                    byline = "author";
+                }
 
-                news.add(new News(title, sectionName, date, url, byline));
+                trailText = fields.optString("trailText");
+                if (TextUtils.isEmpty(byline)) {
+                    trailText = "content";
+                }
+                if (trailText.contains("<strong>")) {
+                    trailText = trailText.replaceAll("<strong>", "");
+                    trailText = trailText.replaceAll("</strong>", "");
+                    trailText = trailText.trim();
+                    String s = byline + ":";
+                    if (trailText.contains(s)) {
+                        trailText = trailText.replaceAll(s, "");
+                        trailText = trailText.trim();
+                    }
+                }
+
+                news.add(new News(title, sectionName, date, url, byline, trailText));
 
             }
         } catch (JSONException e) {
-            Log.e("MyTAGS", "Problem parsing the earthquake JSON results", e);
+
         }
         return news;
     }
@@ -117,10 +136,10 @@ public final class QueryUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
-                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -151,7 +170,7 @@ public final class QueryUtils {
         try {
             url = new URL(stringUrl);
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, "Problem building the URL ", e);
+
         }
         return url;
     }

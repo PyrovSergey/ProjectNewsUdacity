@@ -14,7 +14,6 @@ public class NewsAdapter extends ArrayAdapter<News> {
         super(context, 0, news);
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItemView = convertView;
@@ -38,6 +37,9 @@ public class NewsAdapter extends ArrayAdapter<News> {
 
         TextView bylineTextView = (TextView) listItemView.findViewById(R.id.byline);
         bylineTextView.setText(currentNews.getByline());
+
+        TextView trailTextView = (TextView) listItemView.findViewById(R.id.trailText);
+        trailTextView.setText(currentNews.getTrailText());
 
         return listItemView;
     }
