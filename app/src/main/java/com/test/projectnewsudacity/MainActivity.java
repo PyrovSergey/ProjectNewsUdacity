@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private NewsAdapter newsAdapter;
     private TextView mEmptyStateTextView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private NewsLoader loader;
 
     private static final String str1 = "http://content.guardianapis.com/search?order-by=newest&page-size=200&q=";
     private static final String str2 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
@@ -84,7 +85,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
         Log.e("MyTAGS", "сработал метод onCreateLoader()");
-        return new NewsLoader(this, result);
+        if (loader == null){
+            loader = new NewsLoader(this, result);
+        }
+        return loader;
     }
 
     @Override
@@ -131,16 +135,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onRefresh() {
         mSwipeRefreshLayout.setRefreshing(false);
 
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(NEWS_LOADER_ID, null, this);
-        Log.e("MyTAGS", "сработал метод initLoader()");
-
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            loaderManager = getLoaderManager();
-            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+            loader.forceLoad();
         } else {
             View loadingIndicator = findViewById(R.id.loading_indicator);
             loadingIndicator.setVisibility(View.GONE);
