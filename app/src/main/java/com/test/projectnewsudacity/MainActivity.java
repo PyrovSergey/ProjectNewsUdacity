@@ -7,24 +7,26 @@ import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>>  {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>>, SwipeRefreshLayout.OnRefreshListener {
 
     private NewsAdapter newsAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private TextView mEmptyStateTextView;
+    private View loadingIndicator;
+    private ListView newsListView;
 
     private static final String str1 = "http://content.guardianapis.com/search?order-by=newest&page-size=200&q=";
     private static final String str2 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
@@ -40,7 +42,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         result = str1 + str2;
         result = result.replaceAll(" ", "+");
 
-        ListView newsListView = (ListView) findViewById(R.id.list);
+        loadingIndicator = findViewById(R.id.loading_indicator);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        newsListView = (ListView) findViewById(R.id.list);
         newsAdapter = new NewsAdapter(this, new ArrayList<News>());
 
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
@@ -60,31 +66,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(newsIntent);
             }
         });
+        networkInfoAndLoad();
+    }
 
+    private void loadNews() {
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(NEWS_LOADER_ID, null, this);
-
         Log.e("MyTAGS", "сработал метод initLoader()");
+    }
 
+    private void networkInfoAndLoad() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            loaderManager = getLoaderManager();
-
-            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+            loadNews();
         } else {
-            View loadingIndicator = findViewById(R.id.loading_indicator);
             loadingIndicator.setVisibility(View.GONE);
-
             mEmptyStateTextView.setText("No internet connection");
         }
     }
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
-        Log.e("MyTAGS", "сработал метод onCreateLoader()" );
+        Log.e("MyTAGS", "сработал метод onCreateLoader()");
         return new NewsLoader(this, result);
     }
 
@@ -106,5 +111,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         newsAdapter.clear();
         result = "";
         Log.e("MyTAGS", "сработал метод onLoaderReset()");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        networkInfoAndLoad();
+    }
+
+    @Override
+    public void onRefresh() {
+        networkInfoAndLoad();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
