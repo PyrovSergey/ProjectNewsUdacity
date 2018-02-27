@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onRefresh() {
+        Log.e("MyTAGS", "сработал метод onRefresh()");
         mSwipeRefreshLayout.setRefreshing(false);
 
         LoaderManager loaderManager = getLoaderManager();
