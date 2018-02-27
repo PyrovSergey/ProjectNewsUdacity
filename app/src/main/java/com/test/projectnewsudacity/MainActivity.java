@@ -23,10 +23,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private NewsAdapter newsAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-
     private TextView mEmptyStateTextView;
-    private View loadingIndicator;
-    private ListView newsListView;
 
     private static final String str1 = "http://content.guardianapis.com/search?order-by=newest&page-size=200&q=";
     private static final String str2 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
@@ -42,11 +39,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         result = str1 + str2;
         result = result.replaceAll(" ", "+");
 
-        loadingIndicator = findViewById(R.id.loading_indicator);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        newsListView = (ListView) findViewById(R.id.list);
+        ListView newsListView = (ListView) findViewById(R.id.list);
         newsAdapter = new NewsAdapter(this, new ArrayList<News>());
 
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
@@ -66,22 +62,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(newsIntent);
             }
         });
-        networkInfoAndLoad();
+        loadDataNews();
     }
 
-    private void loadNews() {
+    private void loadDataNews() {
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(NEWS_LOADER_ID, null, this);
         Log.e("MyTAGS", "сработал метод initLoader()");
-    }
 
-    private void networkInfoAndLoad() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            loadNews();
+            loaderManager = getLoaderManager();
+            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
         } else {
+            View loadingIndicator = findViewById(R.id.loading_indicator);
             loadingIndicator.setVisibility(View.GONE);
             mEmptyStateTextView.setText("No internet connection");
         }
@@ -109,19 +105,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<List<News>> loader) {
         newsAdapter.clear();
-        result = "";
+        //result = "";
         Log.e("MyTAGS", "сработал метод onLoaderReset()");
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        networkInfoAndLoad();
-    }
-
-    @Override
     public void onRefresh() {
-        networkInfoAndLoad();
+        Log.e("MyTAGS", "сработал метод onRefresh()");
         swipeRefreshLayout.setRefreshing(false);
+        loadDataNews();
     }
 }
