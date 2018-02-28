@@ -70,16 +70,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(NEWS_LOADER_ID, null, this);
         Log.e("MyTAGS", "сработал метод initLoader()");
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            loaderManager = getLoaderManager();
-            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+            loader = (NewsLoader) getLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
         } else {
             alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
         }
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
         Log.e("MyTAGS", "сработал метод onCreateLoader()");
-        if (loader == null) {
+        if (i == NEWS_LOADER_ID) {
             loader = new NewsLoader(this, result);
         }
         return loader;
