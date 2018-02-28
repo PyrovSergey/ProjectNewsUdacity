@@ -136,15 +136,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Log.e("MyTAGS", "сработал метод onRefresh()");
         mSwipeRefreshLayout.setRefreshing(false);
         newsAdapter.clear();
-
+        View loadingIndicator = findViewById(R.id.loading_indicator);
+        loadingIndicator.setVisibility(View.GONE);
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
             loader.forceLoad();
         } else {
-            View loadingIndicator = findViewById(R.id.loading_indicator);
-            loadingIndicator.setVisibility(View.GONE);
+//            View loadingIndicator = findViewById(R.id.loading_indicator);
+//            loadingIndicator.setVisibility(View.GONE);
             mEmptyStateTextView.setText("No internet connection");
         }
     }
