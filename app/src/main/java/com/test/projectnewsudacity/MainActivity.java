@@ -69,11 +69,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
+        loader = (NewsLoader) getLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
+
         if (networkInfo != null && networkInfo.isConnected()) {
-            loader = (NewsLoader) getLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
+            // loader = (NewsLoader) getLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
         } else {
             alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
-            mSwipeRefreshLayout.setRefreshing(false); // был добавлен после отправки
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
