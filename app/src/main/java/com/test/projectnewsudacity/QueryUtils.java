@@ -2,7 +2,6 @@ package com.test.projectnewsudacity;
 
 import android.text.Html;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -134,8 +133,6 @@ public final class QueryUtils {
             if (urlConnection.getResponseCode() == 200) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
-            } else {
-
             }
         } catch (IOException e) {
 

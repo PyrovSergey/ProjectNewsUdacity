@@ -1,7 +1,6 @@
 package com.test.projectnewsudacity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +16,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +39,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         result = str1 + str2;
         result = result.replaceAll(" ", "+");
-
-        if (loader == null) {
-            loader = new NewsLoader(this, result);
-        }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -79,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             loader = (NewsLoader) getLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
         } else {
             alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
+            mSwipeRefreshLayout.setRefreshing(false); // был добавлен после отправки
         }
     }
 
@@ -112,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         newsAdapter.clear();
         if (!QueryUtils.isAnyNews) {
             alertMessage(getString(R.string.no_news), getString(R.string.swipe_to_repeat_request), R.drawable.ic_bubble_chart_deep_purple_a400_48dp);
-            //Toast.makeText(this, "No news", Toast.LENGTH_SHORT).show();
         }
 
         if (news != null && !news.isEmpty()) {
@@ -137,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo == null) {
             alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
-            //Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -153,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             newsAdapter.clear();
             mSwipeRefreshLayout.setRefreshing(false);
             alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
-            //Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
         }
     }
 }
