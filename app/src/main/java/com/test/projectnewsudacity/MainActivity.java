@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onRefresh() {
         Log.e("MyTAGS", "сработал метод onRefresh()");
         mSwipeRefreshLayout.setRefreshing(false);
+        newsAdapter.clear();
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
