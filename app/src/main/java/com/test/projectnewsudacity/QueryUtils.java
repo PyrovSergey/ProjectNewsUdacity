@@ -1,6 +1,8 @@
 package com.test.projectnewsudacity;
 
+import android.text.Html;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class QueryUtils {
+
+    public static boolean isAnyNews;
 
     private QueryUtils() {
     }
@@ -46,6 +50,9 @@ public final class QueryUtils {
             JSONObject jsonObject = new JSONObject(newsRequestJSON);
             JSONObject response = jsonObject.getJSONObject("response");
             JSONArray results = response.getJSONArray("results");
+            if (results.length() != 0) {
+                isAnyNews = true;
+            }
             for (int i = 0; i < results.length(); i++) {
                 String title;
                 String sectionName;
@@ -91,23 +98,15 @@ public final class QueryUtils {
                 }
                 byline = fields.optString("byline");
                 if (TextUtils.isEmpty(byline)) {
-                    byline = "author";
+                    byline = "";
                 }
 
                 trailText = fields.optString("trailText");
                 if (TextUtils.isEmpty(byline)) {
-                    trailText = "content";
+                    trailText = " ";
                 }
-                if (trailText.contains("<strong>")) {
-                    trailText = trailText.replaceAll("<strong>", "");
-                    trailText = trailText.replaceAll("</strong>", "");
-                    trailText = trailText.trim();
-                    String s = byline + ":";
-                    if (trailText.contains(s)) {
-                        trailText = trailText.replaceAll(s, "");
-                        trailText = trailText.trim();
-                    }
-                }
+
+                trailText = stripHtml(trailText);
 
                 news.add(new News(title, sectionName, date, url, byline, trailText));
 
@@ -173,6 +172,14 @@ public final class QueryUtils {
 
         }
         return url;
+    }
+
+    private static String stripHtml(String html) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return String.valueOf(Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            return String.valueOf(Html.fromHtml(html));
+        }
     }
 }
 

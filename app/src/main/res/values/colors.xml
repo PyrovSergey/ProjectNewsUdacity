@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorSectionName">#245388</color>
     <color name="colorTextSectionName">#E3F2FD</color>
+    <color name="blue">#304FFE</color>
+    <color name="purple">#D500F9</color>
+    <color name="yellow">#EEFF41</color>
+    <color name="red">#DD2C00</color>
 </resources>

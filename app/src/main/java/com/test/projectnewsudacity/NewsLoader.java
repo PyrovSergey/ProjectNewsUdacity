@@ -2,8 +2,9 @@ package com.test.projectnewsudacity;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.util.Log;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.List;
 
 public class NewsLoader extends AsyncTaskLoader<List<News>> {

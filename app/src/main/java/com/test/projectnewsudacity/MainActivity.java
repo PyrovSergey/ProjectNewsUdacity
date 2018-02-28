@@ -1,7 +1,10 @@
 package com.test.projectnewsudacity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.net.ConnectivityManager;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +25,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>>, SwipeRefreshLayout.OnRefreshListener {
 
     private NewsAdapter newsAdapter;
-    //    private TextView mEmptyStateTextView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsLoader loader;
 
-    private static final String str1 = "http://content.guardianapis.com/search?order-by=newest&page-size=200&q=";
+    private static final String str1 = "http://content.guardianapis.com/search?order-by=newest&page-size=50&q=";
     private static final String str2 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
     private static String result;
 
@@ -45,12 +48,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources()
+                .getColor(R.color.blue), getResources()
+                .getColor(R.color.purple), getResources()
+                .getColor(R.color.yellow), getResources()
+                .getColor(R.color.red));
+        mSwipeRefreshLayout.setRefreshing(true);
 
         ListView newsListView = (ListView) findViewById(R.id.list);
         newsAdapter = new NewsAdapter(this, new ArrayList<News>());
-
-//        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
-//        newsListView.setEmptyView(mEmptyStateTextView);
 
         newsListView.setAdapter(newsAdapter);
 
@@ -58,11 +64,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 News currentNews = newsAdapter.getItem(i);
-
                 Uri newsUri = Uri.parse(currentNews.getUrl());
-
                 Intent newsIntent = new Intent(Intent.ACTION_VIEW, newsUri);
-
                 startActivity(newsIntent);
 
             }
@@ -79,10 +82,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             loaderManager = getLoaderManager();
             loaderManager.initLoader(NEWS_LOADER_ID, null, this);
         } else {
-            mSwipeRefreshLayout.setRefreshing(true);
-//            View loadingIndicator = findViewById(R.id.loading_indicator);
-//            loadingIndicator.setVisibility(View.GONE);
-//            mEmptyStateTextView.setText("No internet connection");
+            alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
         }
     }
 
@@ -95,12 +95,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return loader;
     }
 
+    private void alertMessage(String title, String message, int icon) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(title)
+                .setMessage(message)
+                .setIcon(icon)
+                .setCancelable(false)
+                .setNegativeButton("ОК",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> news) {
-
-//        View loadingIndicator = findViewById(R.id.loading_indicator);
-//        loadingIndicator.setVisibility(View.GONE);
         newsAdapter.clear();
+        if (!QueryUtils.isAnyNews) {
+            alertMessage(getString(R.string.no_news), getString(R.string.swipe_to_repeat_request), R.drawable.ic_bubble_chart_deep_purple_a400_48dp);
+            //Toast.makeText(this, "No news", Toast.LENGTH_SHORT).show();
+        }
+
         if (news != null && !news.isEmpty()) {
             newsAdapter.addAll(news);
             mSwipeRefreshLayout.setRefreshing(false);
@@ -119,43 +137,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onResume() {
         super.onResume();
-        connectInfo();
-    }
-
-    private void connectInfo() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-            LoaderManager loaderManager = getLoaderManager();
-            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
-        } else {
-//            View loadingIndicator = findViewById(R.id.loading_indicator);
-//            loadingIndicator.setVisibility(View.GONE);
-//            mEmptyStateTextView.setText("No internet connection");
+        if (networkInfo == null) {
+            alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
+            //Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onRefresh() {
         Log.e("MyTAGS", "сработал метод onRefresh()");
-        //mSwipeRefreshLayout.setRefreshing(false);
-        // newsAdapter.clear();
-//        View loadingIndicator = findViewById(R.id.loading_indicator);
-//        loadingIndicator.setVisibility(View.GONE);
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-
             loader.forceLoad();
-            mSwipeRefreshLayout.setRefreshing(false);
         } else {
             newsAdapter.clear();
             mSwipeRefreshLayout.setRefreshing(false);
-//            View loadingIndicator = findViewById(R.id.loading_indicator);
-//            loadingIndicator.setVisibility(View.GONE);
-//            mEmptyStateTextView.setText("No internet connection");
+            alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
+            //Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
         }
     }
 }
