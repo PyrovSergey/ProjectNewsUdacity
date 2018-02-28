@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Uri newsUri = Uri.parse(currentNews.getUrl());
                 Intent newsIntent = new Intent(Intent.ACTION_VIEW, newsUri);
                 startActivity(newsIntent);
-
             }
         });
 
