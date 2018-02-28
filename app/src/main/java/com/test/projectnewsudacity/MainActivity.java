@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>>, SwipeRefreshLayout.OnRefreshListener {
 
     private NewsAdapter newsAdapter;
-    private TextView mEmptyStateTextView;
+    //    private TextView mEmptyStateTextView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsLoader loader;
 
@@ -40,14 +39,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         result = str1 + str2;
         result = result.replaceAll(" ", "+");
 
+        if (loader == null) {
+            loader = new NewsLoader(this, result);
+        }
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         ListView newsListView = (ListView) findViewById(R.id.list);
         newsAdapter = new NewsAdapter(this, new ArrayList<News>());
 
-        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
-        newsListView.setEmptyView(mEmptyStateTextView);
+//        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+//        newsListView.setEmptyView(mEmptyStateTextView);
 
         newsListView.setAdapter(newsAdapter);
 
@@ -76,16 +79,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             loaderManager = getLoaderManager();
             loaderManager.initLoader(NEWS_LOADER_ID, null, this);
         } else {
-            View loadingIndicator = findViewById(R.id.loading_indicator);
-            loadingIndicator.setVisibility(View.GONE);
-            mEmptyStateTextView.setText("No internet connection");
+            mSwipeRefreshLayout.setRefreshing(true);
+//            View loadingIndicator = findViewById(R.id.loading_indicator);
+//            loadingIndicator.setVisibility(View.GONE);
+//            mEmptyStateTextView.setText("No internet connection");
         }
     }
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
         Log.e("MyTAGS", "сработал метод onCreateLoader()");
-        if (loader == null){
+        if (loader == null) {
             loader = new NewsLoader(this, result);
         }
         return loader;
@@ -94,13 +98,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> news) {
 
-        View loadingIndicator = findViewById(R.id.loading_indicator);
-        loadingIndicator.setVisibility(View.GONE);
-
+//        View loadingIndicator = findViewById(R.id.loading_indicator);
+//        loadingIndicator.setVisibility(View.GONE);
         newsAdapter.clear();
         if (news != null && !news.isEmpty()) {
             newsAdapter.addAll(news);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.e("MyTAGS", "сработал метод onLoadFinished()");
     }
 
@@ -125,28 +130,32 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             LoaderManager loaderManager = getLoaderManager();
             loaderManager.initLoader(NEWS_LOADER_ID, null, this);
         } else {
-            View loadingIndicator = findViewById(R.id.loading_indicator);
-            loadingIndicator.setVisibility(View.GONE);
-            mEmptyStateTextView.setText("No internet connection");
+//            View loadingIndicator = findViewById(R.id.loading_indicator);
+//            loadingIndicator.setVisibility(View.GONE);
+//            mEmptyStateTextView.setText("No internet connection");
         }
     }
 
     @Override
     public void onRefresh() {
         Log.e("MyTAGS", "сработал метод onRefresh()");
-        mSwipeRefreshLayout.setRefreshing(false);
-        newsAdapter.clear();
-        View loadingIndicator = findViewById(R.id.loading_indicator);
-        loadingIndicator.setVisibility(View.GONE);
+        //mSwipeRefreshLayout.setRefreshing(false);
+        // newsAdapter.clear();
+//        View loadingIndicator = findViewById(R.id.loading_indicator);
+//        loadingIndicator.setVisibility(View.GONE);
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
+
             loader.forceLoad();
+            mSwipeRefreshLayout.setRefreshing(false);
         } else {
+            newsAdapter.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
 //            View loadingIndicator = findViewById(R.id.loading_indicator);
 //            loadingIndicator.setVisibility(View.GONE);
-            mEmptyStateTextView.setText("No internet connection");
+//            mEmptyStateTextView.setText("No internet connection");
         }
     }
 }
