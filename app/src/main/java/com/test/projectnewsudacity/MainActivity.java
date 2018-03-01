@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private NewsLoader loader;
 
     private static final String str1 = "http://content.guardianapis.com/search?order-by=newest&page-size=50&q=";
-    private static String query = "";
+    private String searchQuery;
     private static final String str3 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
-    private static String result  = str1 + query + str3;;
+    private static String result  = str1 + str3;;
 
     private static final int NEWS_LOADER_ID = 1;
 
@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             newsAdapter.clear();
+            loader.setUrl(searchQuery);
             loader.forceLoad();
         } else {
             newsAdapter.clear();
@@ -164,10 +165,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public boolean onQueryTextSubmit(String inputQuery) {
                 // тут получаем строку для поиска
-                query = inputQuery;
-                inputText(result);
+                searchQuery = searchResult(inputQuery);
+                inputText(searchQuery);
                 onRefresh();
-                return false;
+                return true;
             }
 
             @Override
@@ -176,6 +177,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
         return true;
+    }
+
+    private String searchResult(String query){
+        return str1 + query + str3;
     }
 
     private void inputText(String string) {
