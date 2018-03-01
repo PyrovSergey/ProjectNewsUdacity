@@ -51,6 +51,8 @@ public final class QueryUtils {
             JSONArray results = response.getJSONArray("results");
             if (results.length() != 0) {
                 isAnyNews = true;
+            } else {
+                isAnyNews = false;
             }
             for (int i = 0; i < results.length(); i++) {
                 String title;

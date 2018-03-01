@@ -31,10 +31,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsLoader loader;
 
-    private static final String str1 = "http://content.guardianapis.com/search?order-by=newest&page-size=50&q=";
-    private String searchQuery;
-    private static final String str3 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
-    private static String result  = str1 + str3;;
+    private static final String STR_1 = "http://content.guardianapis.com/search?order-by=newest&page-size=50&q=";
+    private String searchQuery = "";
+    private static final String STR_3 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
 
     private static final int NEWS_LOADER_ID = 1;
 
@@ -68,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         Log.e("MyTAGS", "сработал метод initLoader()");
-        //ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        //NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         loader = (NewsLoader) getLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
     }
 
@@ -77,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
         Log.e("MyTAGS", "сработал метод onCreateLoader()");
         if (i == NEWS_LOADER_ID) {
-            loader = new NewsLoader(this, result);
+            loader = new NewsLoader(this, searchResult(null));
+            //Log.e("MyTAGS", result);
         }
         return loader;
     }
@@ -104,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (!QueryUtils.isAnyNews) {
             alertMessage(getString(R.string.no_news), getString(R.string.swipe_to_repeat_request), R.drawable.ic_bubble_chart_deep_purple_a400_48dp);
         }
-
         if (news != null && !news.isEmpty()) {
             newsAdapter.addAll(news);
             mSwipeRefreshLayout.setRefreshing(false);
@@ -116,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<List<News>> loader) {
         newsAdapter.clear();
-        //result = "";
         Log.e("MyTAGS", "сработал метод onLoaderReset()");
     }
 
@@ -140,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             newsAdapter.clear();
-            loader.setUrl(searchQuery);
+            loader.setUrl(searchResult(null));
             loader.forceLoad();
         } else {
             newsAdapter.clear();
@@ -165,34 +161,58 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public boolean onQueryTextSubmit(String inputQuery) {
                 // тут получаем строку для поиска
-                searchQuery = searchResult(inputQuery);
-                inputText(searchQuery);
-                onRefresh();
-                return true;
+                mSwipeRefreshLayout.setRefreshing(true);
+                ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    newsAdapter.clear();
+                    loader.setUrl(searchResult(inputQuery));
+                    loader.forceLoad();
+                } else {
+                    newsAdapter.clear();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
+                }
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText.equals("")) {
+                mSwipeRefreshLayout.setRefreshing(true);
+                ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    newsAdapter.clear();
+                    loader.setUrl(searchResult(newText));
+                    loader.forceLoad();
+                } else {
+                    newsAdapter.clear();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
+                }
+                }
                 return false;
             }
         });
         return true;
     }
 
-    private String searchResult(String query){
-        return str1 + query + str3;
+    private String searchResult(String query) {
+        if (query == null) {
+            return STR_1 + STR_3;
+        }
+        return STR_1 + query + STR_3;
     }
 
     private void inputText(String string) {
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
