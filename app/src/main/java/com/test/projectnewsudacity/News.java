@@ -14,13 +14,16 @@ public class News {
 
     private String trailText;
 
-    public News(String title, String sectionName, String date, String url, String byline, String trailText) {
+    private String thumbnail;
+
+    public News(String title, String sectionName, String date, String url, String byline, String trailText, String thumbnail) {
         this.title = title;
         this.sectionName = sectionName;
         this.date = date;
         this.url = url;
         this.byline = byline;
         this.trailText = trailText;
+        this.thumbnail = thumbnail;
     }
 
     public String getTitle() {
@@ -45,5 +48,9 @@ public class News {
 
     public String getTrailText() {
         return trailText;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
     }
 }

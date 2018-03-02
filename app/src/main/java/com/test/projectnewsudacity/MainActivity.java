@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsLoader loader;
 
-    private static final String STR_1 = "http://content.guardianapis.com/search?order-by=newest&page-size=50&q=";
+    private static final String STR_1 = "http://content.guardianapis.com/search?order-by=newest&page-size=200&q=";
     private String searchQuery = "";
     private static final String STR_3 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
 

@@ -2,6 +2,7 @@ package com.test.projectnewsudacity;
 
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +62,7 @@ public final class QueryUtils {
                 String date;
                 String byline;
                 String trailText;
+                String thumbnail;
                 JSONObject currentNews = results.optJSONObject(i);
                 if (currentNews == null) {
                     continue;
@@ -106,10 +108,16 @@ public final class QueryUtils {
                 if (TextUtils.isEmpty(byline)) {
                     trailText = " ";
                 }
-
                 trailText = stripHtml(trailText);
 
-                news.add(new News(title, sectionName, date, url, byline, trailText));
+                thumbnail = fields.optString("thumbnail");
+                //Log.e("MyPARSE", thumbnail);
+                if (TextUtils.isEmpty(byline)) {
+                    Log.e("MyPARSE", thumbnail);
+                    trailText = "https://media.guim.co.uk/04c27033759a6231874e6b6bf2aa67e83550050e/0_0_875_525/500.jpg";
+                }
+
+                news.add(new News(title, sectionName, date, url, byline, trailText, thumbnail));
 
             }
         } catch (JSONException e) {
