@@ -24,7 +24,34 @@
     <string name="settings_order_by_most_money_label">Money</string>
     <string name="settings_order_by_most_money_value" translatable="false">money</string>
 
-    //////////////////////////////////////////
-    <!--football "uk-news" "news" "games" "world" "business" "politics" "liveblog" "commentisfree" "music" "community" "sport" "stage" "education" "media" "technology" "us-news" "books" "lifeandstyle" "film" "environment" "artanddesign" "fashion" "artanddesign" "stage" "society" "tv-and-radio" "social-care-network"-->
+    <!--//////////////////////////////////////////-->
 
+    <string name="settings_order_by_books_label">Books</string>
+    <string name="settings_order_by_books_value" translatable="false">books</string>
+
+    <string name="settings_order_by_film_label">Film</string>
+    <string name="settings_order_by_film_value" translatable="false">film</string>
+
+    <string name="settings_order_by_music_label">Music</string>
+    <string name="settings_order_by_music_value" translatable="false">music</string>
+
+    <string name="settings_order_by_sport_label">Sport</string>
+    <string name="settings_order_by_sport_value" translatable="false">sport</string>
+
+    <string name="settings_order_by_education_label">Education</string>
+    <string name="settings_order_by_education_value" translatable="false">education</string>
+
+    <string name="settings_order_by_football_label">Football</string>
+    <string name="settings_order_by_football_value" translatable="false">football</string>
+
+    <string name="settings_order_by_uk_news_label">Uk-news</string>
+    <string name="settings_order_by_uk_news_value" translatable="false">uk-news</string>
+
+    <string name="settings_order_by_games_label">Games</string>
+    <string name="settings_order_by_games_value" translatable="false">games</string>
+
+    <string name="settings_order_by_technology_label">Technology</string>
+    <string name="settings_order_by_technology_value" translatable="false">technology</string>
+
+    <!--////////////////////////////////////////-->
 </resources>

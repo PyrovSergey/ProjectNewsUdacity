@@ -10,7 +10,7 @@
         android:title="@string/settings_page_size_news"/>
 
     <ListPreference
-        android:defaultValue="@string/settings_page_size_default"
+        android:defaultValue="@string/settings_only_show_default"
         android:entries="@array/settings_order_by_labels"
         android:entryValues="@array/settings_order_by_values"
         android:key="@string/settings_only_show_key"

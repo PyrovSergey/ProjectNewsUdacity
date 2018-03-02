@@ -4,6 +4,15 @@
         <item>@string/settings_order_by_none_label</item>
         <item>@string/settings_order_by_most_money_label</item>
         /////
+        <item>@string/settings_order_by_books_label</item>
+        <item>@string/settings_order_by_film_label</item>
+        <item>@string/settings_order_by_music_label</item>
+        <item>@string/settings_order_by_sport_label</item>
+        <item>@string/settings_order_by_education_label</item>
+        <item>@string/settings_order_by_football_label</item>
+        <item>@string/settings_order_by_uk_news_label</item>
+        <item>@string/settings_order_by_games_label</item>
+        <item>@string/settings_order_by_technology_label</item>
 
     </string-array>
 
@@ -11,6 +20,14 @@
         <item>@string/settings_order_by_none_value</item>
         <item>@string/settings_order_by_most_money_value</item>
         /////
-
+        <item>@string/settings_order_by_books_value</item>
+        <item>@string/settings_order_by_film_value</item>
+        <item>@string/settings_order_by_music_value</item>
+        <item>@string/settings_order_by_sport_value</item>
+        <item>@string/settings_order_by_education_value</item>
+        <item>@string/settings_order_by_football_value</item>
+        <item>@string/settings_order_by_uk_news_value</item>
+        <item>@string/settings_order_by_games_value</item>
+        <item>@string/settings_order_by_technology_value</item>
     </string-array>
 </resources>
