@@ -7,4 +7,24 @@
 
     <string name="settings_menu_item">Settings</string>
     <string name="settings_title">News Settings</string>
+
+    <string name="settings_page_size_news">Page size</string>
+    <string name="settings_page_size_key" translatable="false">page_size</string>
+    <string name="settings_page_size_default" translatable="false">200</string>
+
+    <string name="settings_only_show">Only show</string>
+    <string name="settings_only_show_key" translatable="false">only_show</string>
+    <string name="settings_only_show_default" translatable="false">none</string>
+
+
+    <string name="settings_order_by_none_label">None</string>
+    <string name="settings_order_by_none_value" translatable="false">none</string>
+
+
+    <string name="settings_order_by_most_money_label">Money</string>
+    <string name="settings_order_by_most_money_value" translatable="false">money</string>
+
+    //////////////////////////////////////////
+    <!--football "uk-news" "news" "games" "world" "business" "politics" "liveblog" "commentisfree" "music" "community" "sport" "stage" "education" "media" "technology" "us-news" "books" "lifeandstyle" "film" "environment" "artanddesign" "fashion" "artanddesign" "stage" "society" "tv-and-radio" "social-care-network"-->
+
 </resources>

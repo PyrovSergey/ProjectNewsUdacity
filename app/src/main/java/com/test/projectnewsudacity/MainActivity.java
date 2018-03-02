@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -31,9 +33,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsLoader loader;
 
-    private static final String STR_1 = "http://content.guardianapis.com/search?order-by=newest&page-size=200&q=";
-    private String searchQuery = "";
-    private static final String STR_3 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
+    private static final String USGS_REQUEST_URL = "http://content.guardianapis.com/search";
+    //private static final String STR_1 = "http://content.guardianapis.com/search?order-by=newest&page-size=200&q=";
+    ///private static final String STR_3 = "&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline";
 
     private static final int NEWS_LOADER_ID = 1;
 
@@ -186,11 +188,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return true;
     }
 
+    // http://content.guardianapis.com/search?order-by=newest&page-size=200&q=&api-key=test&order-by=newest&show-fields=thumbnail,trailText,byline
     private String searchResult(String query) {
-        if (query == null) {
-            return STR_1 + STR_3;
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String pageSize = sharedPreferences.getString(getString(R.string.settings_page_size_key), getString(R.string.settings_page_size_default));
+
+        Uri baseUri = Uri.parse(USGS_REQUEST_URL);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        uriBuilder.appendQueryParameter("page-size", pageSize);                         // можем менять кол-во строк
+        uriBuilder.appendQueryParameter("api-key", "test");
+        uriBuilder.appendQueryParameter("show-fields", "thumbnail,trailText,byline");
+        String section = sharedPreferences.getString(getString(R.string.settings_only_show_key), getString(R.string.settings_only_show_default));
+        if (!section.equals("none")) {
+            uriBuilder.appendQueryParameter("section", section);   ///
         }
-        return STR_1 + query + STR_3;
+
+        if (query == null) {
+            uriBuilder.appendQueryParameter("order-by", "newest");
+            return uriBuilder.toString();
+        }
+        uriBuilder.appendQueryParameter("order-by", "relevance");
+        uriBuilder.appendQueryParameter("q", query);
+
+        return uriBuilder.toString();
     }
 
     private void inputText(String string) {
