@@ -166,7 +166,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
                     newsAdapter.clear();
-                    loader.setUrl(searchResult(inputQuery));
+                    String query = inputQuery.replaceAll(" ", "+");
+                    loader.setUrl(searchResult(query));
                     loader.forceLoad();
                 } else {
                     newsAdapter.clear();
@@ -178,20 +179,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.equals("")) {
-                mSwipeRefreshLayout.setRefreshing(true);
-                ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-                if (networkInfo != null && networkInfo.isConnected()) {
-                    newsAdapter.clear();
-                    loader.setUrl(searchResult(newText));
-                    loader.forceLoad();
-                } else {
-                    newsAdapter.clear();
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    alertMessage(getString(R.string.no_internet_connection), getString(R.string.Check_connection_settings), R.drawable.ic_signal_wifi_off_deep_purple_400_48dp);
-                }
-                }
+
                 return false;
             }
         });

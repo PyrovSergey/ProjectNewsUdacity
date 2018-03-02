@@ -36,7 +36,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="229dp"
+            android:layout_width="470dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -76,14 +76,14 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:padding="5dp">
 
             <ImageView
                 android:id="@+id/image_news"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 tools:background="@drawable/news_placeholder" />
         </LinearLayout>
 
