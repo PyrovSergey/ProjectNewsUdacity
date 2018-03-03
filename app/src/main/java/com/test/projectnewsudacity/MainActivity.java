@@ -42,11 +42,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String RELEVANCE = "relevance";
     private static final String QUERY = "q";
     private static final String HTTPS_PLAY_GOOGLE_COM_STORE_APPS_DETAILS_ID_COM_ANDROID_CHROME = "https://play.google.com/store/apps/details?id=com.android.chrome";
+    private static final String USGS_REQUEST_URL = "http://content.guardianapis.com/search";
+
     private NewsAdapter newsAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsLoader loader;
 
-    private static final String USGS_REQUEST_URL = "http://content.guardianapis.com/search";
     private static final int NEWS_LOADER_ID = 1;
 
     @Override

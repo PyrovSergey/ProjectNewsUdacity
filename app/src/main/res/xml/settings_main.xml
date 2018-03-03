@@ -7,7 +7,7 @@
         android:inputType="numberDecimal"
         android:key="@string/settings_page_size_key"
         android:selectAllOnFocus="true"
-        android:title="@string/settings_page_size_news"/>
+        android:title="@string/settings_page_size_news" />
 
     <ListPreference
         android:defaultValue="@string/settings_only_show_default"
