@@ -16,15 +16,11 @@
     <string name="settings_only_show_key" translatable="false">only_show</string>
     <string name="settings_only_show_default" translatable="false">none</string>
 
-
     <string name="settings_order_by_none_label">None</string>
     <string name="settings_order_by_none_value" translatable="false">none</string>
 
-
     <string name="settings_order_by_most_money_label">Money</string>
     <string name="settings_order_by_most_money_value" translatable="false">money</string>
-
-    <!--//////////////////////////////////////////-->
 
     <string name="settings_order_by_books_label">Books</string>
     <string name="settings_order_by_books_value" translatable="false">books</string>
@@ -52,6 +48,7 @@
 
     <string name="settings_order_by_technology_label">Technology</string>
     <string name="settings_order_by_technology_value" translatable="false">technology</string>
+    <string name="ok">ОК</string>
+    <string name="install_the_browser">Please install the browser to view the news</string>
 
-    <!--////////////////////////////////////////-->
 </resources>
