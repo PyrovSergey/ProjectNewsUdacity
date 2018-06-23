@@ -2,6 +2,7 @@ package com.test.projectnewsudacity;
 
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +46,7 @@ public final class QueryUtils {
         String jsonResponce = null;
         try {
             jsonResponce = makeHttpRequest(url);
+            Log.e("MyTAG", url.toString());
         } catch (IOException e) {
 
         }

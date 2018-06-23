@@ -32,7 +32,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
 
         String s = currentNews.getThumbnail();
         if (!TextUtils.isEmpty(s)) {
-            Picasso.with(getContext())
+            Picasso.get()
                     .load(currentNews.getThumbnail())
                     .placeholder(R.drawable.news_placeholder)
                     .error(R.drawable.guardian_logo)

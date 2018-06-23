@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final String PAGE_SIZE = "page-size";
     private static final String API_KEY = "api-key";
-    private static final String KEY = "test";
+    private static final String KEY = "19d64fde-9a83-435e-9378-a43e6778b553";
     private static final String SHOW_FIELDS = "show-fields";
     private static final String THUMBNAIL_TRAIL_TEXT_BYLINE = "thumbnail,trailText,byline";
     private static final String NONE = "none";
